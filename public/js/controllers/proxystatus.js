@@ -6,50 +6,50 @@
 
   app.controller('proxyStatusCtrl', ['$scope', '$http', function ($scope,$http) {
 
-	$scope.init = function(){
-		$http.get('/updateProxyHosts').
-		success(function(){
-			updateProxyInfo();
-		}).
-		error(proxyErrorHandling);
-	};
-
-	var updateProxyInfo = function() {
-		$http.get('/proxyCheck').
-			success(proxySuccesshandling).
+		$scope.init = function(){
+			$http.get('/updateProxyHosts').
+			success(function(){
+				updateProxyInfo();
+			}).
 			error(proxyErrorHandling);
-	};
+		};
 
-	var proxySuccesshandling = function(data, status, headers, config) {
-		var online = 0;
-		var offline = 0;
-		data.forEach(function (host) {
-			if(host.status >= 300){
-				offline++;
-			} else {
-				online++;
-			}
-		});
-		$scope.proxyStatusLabels[0] = "Online ("+online+")";
-		$scope.proxyStatusLabels[1] = "Offline ("+offline+")";
-		$scope.proxyStatusData[0] = online;
-		$scope.proxyStatusData[1] = offline;
-	};
+		var updateProxyInfo = function() {
+			$http.get('/proxyCheck').
+				success(proxySuccesshandling).
+				error(proxyErrorHandling);
+		};
 
-	var proxyErrorHandling = function(data, status, headers, config) {
+		var proxySuccesshandling = function(data, status, headers, config) {
+			var online = 0;
+			var offline = 0;
+			data.forEach(function (host) {
+				if(host.status >= 300){
+					offline++;
+				} else {
+					online++;
+				}
+			});
+			$scope.proxyStatusLabels[0] = "Online ("+online+")";
+			$scope.proxyStatusLabels[1] = "Offline ("+offline+")";
+			$scope.proxyStatusData[0] = online;
+			$scope.proxyStatusData[1] = offline;
+		};
 
-	};
+		var proxyErrorHandling = function(data, status, headers, config) {
 
-	$scope.proxyStatusSucess = 37;
-	$scope.proxyStatusFail = 2;
+		};
 
-	$scope.proxyStatusLabels = ["Online","Offline"];
-	$scope.proxyStatusData = [1,0];
-	$scope.proxyStatusColors = ['#5cb85c','#d9534f'];
+		$scope.proxyStatusSucess = 37;
+		$scope.proxyStatusFail = 2;
 
-	$scope.pieOptions = {animationEasing: "easeOutCirc", animateRotate : true};
+		$scope.proxyStatusLabels = ["Online","Offline"];
+		$scope.proxyStatusData = [1,0];
+		$scope.proxyStatusColors = ['#5cb85c','#d9534f'];
 
-	$scope.init();
+		$scope.pieOptions = {animationEasing: "easeOutCirc", animateRotate : true};
+
+		$scope.init();
 
 	}]);
 
@@ -57,12 +57,33 @@
 	app.controller('reqtestStatusCtrl', ['$scope', '$http', function ($scope,$http) {
 		$scope.reqtestKrav = [];
 		$scope.krav = [];
+		$scope.anvandaStatusar = [];
+		$scope.antalAnvandaStatusar = [];
+		$scope.pieOptions = {animationEasing: "easeOutCirc", animateRotate : true};
+
+		$scope.aktuellSprint = 44;
 
 		$scope.init = function() {
-			$http.get('/reqtest').
-				success(function(data, status, headers, config) {
-					$scope.krav = data;
-				});
+			$http.get('/reqtest').success(hanteraReqtestData);
+		};
+
+		var hanteraReqtestData = function(data, status, headers, config) {
+			$scope.krav = data;
+
+			data.forEach(function(krav){
+				if(krav.Sprint == 44) {
+					var pos = $scope.anvandaStatusar.indexOf(krav["Status på ärendet"]);
+
+					if(pos < 0){
+						pos = $scope.anvandaStatusar.length;
+						$scope.anvandaStatusar.push(krav["Status på ärendet"]);
+						$scope.antalAnvandaStatusar[pos] = 0;
+					}
+					$scope.antalAnvandaStatusar[pos]++;
+				}
+			});
+			console.log($scope.anvandaStatusar.length);
+			console.log($scope.antalAnvandaStatusar.length);
 		};
 
 		$scope.init();
