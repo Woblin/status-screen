@@ -7,7 +7,13 @@ var bodyParser = require('body-parser');
 //var multer  = require('multer');
 var syncRequest = require('sync-request');
 
+var reqtestClient = require('node-rest-client').Client;
 
+var reqTestAuth = JSON.parse(fs.readFileSync(__dirname+"/reqtestUserAuth.json", 'utf8'));
+
+var options_auth = {user:reqTestAuth.userId,password:reqTestAuth.password};
+
+var restClient = new reqtestClient(options_auth);
 
 var app = express();
 
@@ -18,20 +24,50 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 
 /* serves main page */
-app.get("/", function(request, result) {
+app.get("/", function(request, response) {
 	//console.log('static file request : index.html');
-  result.sendFile('index.html', { root: path.join(__dirname, './public') })
+  response.sendFile('index.html', { root: path.join(__dirname, './public') })
 });
 
-app.post("/write", function(request, result) {
-  /* some server side logic */
-  result.send("OK");
+app.get('/reqtest',function(request,response){
+	var sparadeKrav = new Array();
+	var nextLink = "https://secure.reqtest.com/api/v1/projects/"+reqTestAuth.projectId+"/requirements";
+
+	hamtaReqtestKrav(sparadeKrav, nextLink, 0, response);
 });
 
-app.post("/pingCheck", function(request,result){
-	result.send("OK");
-});
+function hamtaReqtestKrav(sparadeKrav, nextLink, itterationer, response) {
+	itterationer++;
 
+	restClient.get(nextLink, function(data, res) {
+    var jsonData = JSON.parse(data);
+    var nextLink = null;
+    jsonData.links.forEach(function(link){
+    	if(link.name == "next")
+    	{
+    		nextLink = link.href;
+    	}
+    });
+
+    jsonData.requirements.forEach(function(reqKrav){
+			var krav = {};
+			krav.id = reqKrav.customId;
+			krav.createdBy = reqKrav.createdBy;
+
+			reqKrav.fieldValues.forEach(function(field){
+				krav[field.fieldName] = field.value;
+			});
+			sparadeKrav.push(krav);
+		});
+
+		if(itterationer < 100 && nextLink != null) {
+			hamtaReqtestKrav(sparadeKrav, nextLink, itterationer, response);
+		} else {
+			response.send(sparadeKrav);
+		}
+	});
+
+}
 
 function updateProxyHostsFile()
 {
@@ -55,11 +91,11 @@ function updateProxyHostsFile()
 
 
 
-app.get("/updateProxyHosts", function(request, result){
-	result.send( updateProxyHostsFile() ? "OK" : "FAIL" );
+app.get("/updateProxyHosts", function(request, response){
+	response.send( updateProxyHostsFile() ? "OK" : "FAIL" );
 });
 
-app.get("/proxyCheck", function(request,result){
+app.get("/proxyCheck", function(request,response){
 	var hosts = [];
 	var protomatch = /^(https?|ftp):\/\//;
 	var proxyVisBuffer = fs.readFileSync(__dirname+"/proxy-vis.json", 'utf8');
@@ -78,20 +114,20 @@ app.get("/proxyCheck", function(request,result){
 			res = syncRequest('GET', host.targetUrl);
 			status = res.statusCode;
 		} catch (err) {
-	    console.log(err);
+	    //console.log(err);
 	    success = false;
 	    status = 999;
 	  }
 
 	  if(status >= 300){
-			console.log(status);
+			//console.log(status);
 			success = false;
 		}
 
 		completedPings.push({url:url,status:status,success:success});
 	});
 
-	result.send(completedPings);
+	response.send(completedPings);
 
 });
 
@@ -105,8 +141,8 @@ app.get("/500", function(request,response){
 
 
 /* serves all the static files */
-app.get(/^(.+)$/, function(request, result) {
-  result.sendFile( request.params[0], { root: path.join(__dirname, './public') });
+app.get(/^(.+)$/, function(request, response) {
+  response.sendFile( request.params[0], { root: path.join(__dirname, './public') });
 });
 
 var port = process.env.PORT || 8989;

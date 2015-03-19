@@ -21,11 +21,9 @@
 	};
 
 	var proxySuccesshandling = function(data, status, headers, config) {
-		console.log(data);
 		var online = 0;
 		var offline = 0;
 		data.forEach(function (host) {
-			console.log(host.status);
 			if(host.status >= 300){
 				offline++;
 			} else {
@@ -53,6 +51,21 @@
 
 	$scope.init();
 
+	}]);
+
+
+	app.controller('reqtestStatusCtrl', ['$scope', '$http', function ($scope,$http) {
+		$scope.reqtestKrav = [];
+		$scope.krav = [];
+
+		$scope.init = function() {
+			$http.get('/reqtest').
+				success(function(data, status, headers, config) {
+					$scope.krav = data;
+				});
+		};
+
+		$scope.init();
 	}]);
 
 })();//Encapsulation end

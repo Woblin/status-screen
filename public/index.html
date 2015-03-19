@@ -76,8 +76,14 @@
         <div class="col-md-2" ng-controller="proxyStatusCtrl">
           <canvas id="proxy-status" class="chart chart-pie" data="proxyStatusData" labels="proxyStatusLabels" legend="true" colours="proxyStatusColors" options="pieOptions"></canvas> 
         </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
+        <div class="col-md-4" ng-controller="reqtestStatusCtrl">
+          <h2>Reqtest</h2>
+          <p>
+            <div ng-repeat="krav in krav | filter:{Sprint:44} | orderBy:'id'">
+              {{krav.id}} - {{krav.Rubrik}}<br>
+              # {{krav.Sprint}}
+            </div>
+          </p>
           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
        </div>
