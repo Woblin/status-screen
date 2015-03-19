@@ -11,6 +11,6 @@
   "dependencies": {
     "body-parser": "^1.12.2",
     "express": "^4.12.2",
-    "ping": "^0.1.9"
+    "sync-request": "^2.0.1"
   }
 }
