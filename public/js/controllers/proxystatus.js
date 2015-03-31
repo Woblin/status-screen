@@ -5,8 +5,10 @@
   var app = angular.module('screenModule', ['chart.js']);
 
   app.controller('proxyStatusCtrl', ['$scope', '$http', function ($scope,$http) {
+  		$scope.loaderVisible = true;
 
 		$scope.init = function(){
+			$scope.loaderVisible = true;
 			$http.get('/updateProxyHosts').
 			success(function(){
 				updateProxyInfo();
@@ -34,10 +36,11 @@
 			$scope.proxyStatusLabels[1] = "Offline ("+offline+")";
 			$scope.proxyStatusData[0] = online;
 			$scope.proxyStatusData[1] = offline;
+			$scope.loaderVisible = false;
 		};
 
 		var proxyErrorHandling = function(data, status, headers, config) {
-
+			$scope.loaderVisible = false;
 		};
 
 		$scope.proxyStatusSucess = 37;
@@ -55,6 +58,7 @@
 
 
 	app.controller('reqtestStatusCtrl', ['$scope', '$http', function ($scope,$http) {
+		$scope.loaderVisible = true;
 		$scope.reqtestKrav = [];
 		$scope.krav = [];
 		$scope.anvandaStatusar = [];
@@ -64,6 +68,7 @@
 		$scope.aktuellSprint = 44;
 
 		$scope.init = function() {
+			$scope.loaderVisible = true;
 			$http.get('/reqtest').success(hanteraReqtestData);
 		};
 
@@ -84,6 +89,7 @@
 			});
 			console.log($scope.anvandaStatusar.length);
 			console.log($scope.antalAnvandaStatusar.length);
+			$scope.loaderVisible = false;
 		};
 
 		$scope.init();
