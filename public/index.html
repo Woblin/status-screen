@@ -12,6 +12,9 @@
 
     <title>Jumbotron Template for Bootstrap</title>
 
+    <!-- Refresh page after 60 seconds -->
+    <meta http-equiv="refresh" content="30;url=http://33-14605.ws.ams.se:8989/matrix.html">
+
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
@@ -34,33 +37,8 @@
 
   </head>
 
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
-
+  <body class="">
+    <div class="ars-text">ARS</div>
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <!--<div class="jumbotron">
       <div class="container-fluid">
@@ -70,17 +48,21 @@
       </div>
     </div>
 -->
-    <div class="container-fluid">
+    <div class="container-fluid" ng-controller="reqtestStatusCtrl">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-2" ng-controller="proxyStatusCtrl">
+        <div class="col-md-4"><img height="60px" src="http://www.arbetsformedlingen.se/webdav/images/mallbilder/startsida2015/af_logo_2014.svg" style="margin-top:10px;" /></div>
+        <div class="col-md-offset-4 col-md-4 text-right"><h1 style="font-weight:bold;font-size:60px; margin-top:0;">TEAM WWW</h1></div>
+      </div>
+      <div class="row">
+        <!--<div class="col-md-2" ng-controller="proxyStatusCtrl">
           <div class="ajaxloader" ng-show="loaderVisible"></div>
           <h2>Proxystatus</h2>
           <canvas id="chart-proxy-status" class="chart chart-pie" data="proxyStatusData" labels="proxyStatusLabels" legend="true" colours="proxyStatusColors" options="pieOptions"></canvas> 
-        </div>
-        <div class="col-md-4" ng-controller="reqtestStatusCtrl">
+        </div>-->
+        <div class="col-md-10">
           <div class="ajaxloader" ng-show="loaderVisible"></div>
-          <h2>Reqtest sprint #{{aktuellSprint}}</h2>
+          <h1>Reqtest sprint #{{aktuellSprint}}</h1>
           <p>
             <canvas id="chart-reqtest-status" class="chart chart-pie" data="antalAnvandaStatusar" labels="anvandaStatusar" legend="true" options="pieOptions"></canvas> 
           </p>
@@ -94,21 +76,21 @@
             </div>
           </p>
           -->
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
        </div>
-        <div class="col-md-6">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-md-2">
+          <h2>Totalt antal ärenden:</h2>
+          <h3>{{antalArendenSprint}}</h3>
+          <hr />
+          <h2>Antal pågående ärenden:</h2>
+          <h3>{{antalPagaende}}</h3>
+          <hr />
+          <h2>Antal parkerade ärenden:</h2>
+          <h3>{{antalParkerade}}</h3>
+          <hr />
+          <h2>Antal avslutade ärenden:</h2>
+          <h3>{{antalAvslutade}}</h3>
         </div>
       </div>
-
-      <hr>
-
-      <footer>
-        <p>&copy; Company 2014</p>
-      </footer>
     </div> <!-- /container -->
   </body>
 </html>

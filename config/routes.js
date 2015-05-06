@@ -16,7 +16,7 @@ router.get("/", function(request, response) {
 	response.sendFile('index.html', { root: path.join(__dirname, './public') })
 });
 
-router.get('/reqtest', reqtest.getReqtest);
+router.get('/reqtest', reqtest.hamtaReqtest);
 
 router.get('/updateProxyHosts', proxy.updateProxyHosts);
 

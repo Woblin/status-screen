@@ -12,7 +12,7 @@ var logger = require('morgan');
 
 //Load routes config.
 var routes = require('./config/routes');
-console.log(routes);
+//console.log(routes);
 var app = express();
 
 

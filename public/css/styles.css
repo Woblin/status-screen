@@ -1,6 +1,6 @@
 body {
-  padding-top: 50px;
-  padding-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 20px;
 }
 
 .ajaxloader {
@@ -12,3 +12,21 @@ body {
 	top: 10px;
 	right: 0;
 }
+
+.ars {
+	border:20px solid red;
+}
+
+.ars-text {
+	display: none;
+}
+
+.ars .ars-text {
+	display: block;
+	color: red;
+	font-size: 120px;
+	position: absolute;
+	left: 50%;
+	margin-left: -100px;
+	top: 10px;
+} 
