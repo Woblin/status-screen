@@ -13,7 +13,7 @@
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Refresh page after 60 seconds -->
-    <meta http-equiv="refresh" content="30;url=http://33-14605.ws.ams.se:8989/matrix.html">
+    <!--<meta http-equiv="refresh" content="30;url=http://33-14605.ws.ams.se:8989/matrix.html">-->
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@
 
   </head>
 
-  <body class="">
+  <body class="" ng-controller="reqtestStatusCtrl" ng-keypress="callFunction($event)" tabindex="0">
     <div class="ars-text">ARS</div>
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <!--<div class="jumbotron">
@@ -48,48 +48,44 @@
       </div>
     </div>
 -->
-    <div class="container-fluid" ng-controller="reqtestStatusCtrl">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4"><img height="60px" src="http://www.arbetsformedlingen.se/webdav/images/mallbilder/startsida2015/af_logo_2014.svg" style="margin-top:10px;" /></div>
-        <div class="col-md-offset-4 col-md-4 text-right"><h1 style="font-weight:bold;font-size:60px; margin-top:0;">TEAM WWW</h1></div>
-      </div>
-      <div class="row">
-        <!--<div class="col-md-2" ng-controller="proxyStatusCtrl">
-          <div class="ajaxloader" ng-show="loaderVisible"></div>
-          <h2>Proxystatus</h2>
-          <canvas id="chart-proxy-status" class="chart chart-pie" data="proxyStatusData" labels="proxyStatusLabels" legend="true" colours="proxyStatusColors" options="pieOptions"></canvas> 
-        </div>-->
-        <div class="col-md-10">
-          <div class="ajaxloader" ng-show="loaderVisible"></div>
-          <h1>Reqtest sprint #{{aktuellSprint}}</h1>
-          <p>
-            <canvas id="chart-reqtest-status" class="chart chart-pie" data="antalAnvandaStatusar" labels="anvandaStatusar" legend="true" options="pieOptions"></canvas> 
-          </p>
-          <!--
-          <p>
-            <div ng-repeat="krav in krav | filter:{Sprint:44} | orderBy:'id'">
-              {{krav.id}} - {{krav.Rubrik}}<br>
-              # {{krav.Sprint}}<br>
-              {{krav["Status på ärendet"]}}
-              <br>
-            </div>
-          </p>
-          -->
-       </div>
-        <div class="col-md-2">
-          <h2>Totalt antal ärenden:</h2>
-          <h3>{{antalArendenSprint}}</h3>
-          <hr />
-          <h2>Antal pågående ärenden:</h2>
-          <h3>{{antalPagaende}}</h3>
-          <hr />
-          <h2>Antal parkerade ärenden:</h2>
-          <h3>{{antalParkerade}}</h3>
-          <hr />
-          <h2>Antal avslutade ärenden:</h2>
-          <h3>{{antalAvslutade}}</h3>
+    <div class="container-fluid"  >
+    <div class="row">
+      <div class="col-md-4"><img height="60px" src="http://www.arbetsformedlingen.se/webdav/images/mallbilder/startsida2015/af_logo_2014.svg" style="margin-top:10px;" /></div>
+      <div class="col-md-offset-4 col-md-4 text-right"><h1 style="font-weight:bold;font-size:60px; margin-top:0;">TEAM WWW {{(showView) ? '1' : '2'}}</h1></div>
+    </div>
+    <div class="row">
+      <div ng-show="showView">
+        <!-- Example row of columns -->
+        
+          <div class="col-md-8">
+            <div class="ajaxloader" ng-show="loaderVisible"></div>
+            <h1>Reqtest sprint #{{aktuellSprint}}</h1>
+            <p>
+              <canvas id="chart-reqtest-status" class="chart chart-pie" data="antalAnvandaStatusar" labels="anvandaStatusar" legend="true" options="pieOptions"></canvas> 
+            </p>
+          </div>
+          <div class="col-md-3">
+            <h2>Totalt antal ärenden:</h2>
+            <h3>{{sprint.antal.arendenSprint}}</h3>
+            <hr />
+            <h2>Antal pågående ärenden:</h2>
+            <h3>{{sprint.antal.pagaende}}</h3>
+            <hr />
+            <h2>Antal parkerade ärenden:</h2>
+            <h3>{{sprint.antal.parkerade}}</h3>
+            <hr />
+            <h2>Antal avslutade ärenden:</h2>
+            <h3>{{sprint.antal.avslutade}}</h3>
+          </div>
+        
         </div>
+        <div ng-show="!showView">
+        <div ng-repeat="krav in sprint.krav" class="req-box col-md-3">
+            <h3>{{krav.Rubrik}}</h3>
+            <h4>id: {{krav.id}}</h4>
+            <h4>Prio: {{krav.Prio}}</h4>
+        </div>
+      </div>
       </div>
     </div> <!-- /container -->
   </body>

@@ -60,7 +60,17 @@
 	}]);
 
 
-	app.controller('reqtestStatusCtrl', ['$scope', '$http', function ($scope,$http) {
+	app.controller('reqtestStatusCtrl', ['$scope', '$http', '$document', function ($scope,$http,$document) {
+		$scope.showView = true;
+
+	    $scope.callFunction = function(eventNew) {
+			if (eventNew.which == 49)
+		    	$scope.showView = true;
+		    if (eventNew.which === 50)
+		    	$scope.showView = false;
+
+		}
+
 		$scope.loaderVisible = true;
 		$scope.reqtestKrav = [];
 		$scope.krav = [];
@@ -84,44 +94,68 @@
 		};
 
 		var hanteraReqtestData = function(data, status, headers, config) {
+			$scope.sprintKrav = [];
+
 			$scope.krav = data;
-			$scope.antalArendenSprint = 0;
-			$scope.antalAvslutade = 0;
-			$scope.antalParkerade = 0;
-			$scope.antalPagaende = 0;
+			$scope.sprint = {};
+			$scope.sprint.antal = {};
+			$scope.sprint.antal.arendenSprint = 0;
+			$scope.sprint.antal.avslutade = 0;
+			$scope.sprint.antal.parkerade = 0;
+			$scope.sprint.antal.pagaende = 0;
+
+			$scope.sprint.krav = new Array();
 
 			data.forEach(function(krav){
 				if(krav.Sprint == $scope.aktuellSprint) {
-					var pos = $scope.anvandaStatusar.indexOf(krav["Status på ärendet"]);
 
-					if(pos < 0){
+					$scope.sprint.krav.push(krav);
+
+					//var pos = $scope.anvandaStatusar.indexOf(krav["Status på ärendet"]);
+
+					/*if(pos < 0){
 						pos = $scope.anvandaStatusar.length;
 						$scope.anvandaStatusar.push(krav["Status på ärendet"]);
 						$scope.antalAnvandaStatusar[pos] = 0;
 					}
-					$scope.antalAnvandaStatusar[pos]++;
-					$scope.antalArendenSprint++;
+					$scope.antalAnvandaStatusar[pos]++;*/
+					$scope.sprint.antal.arendenSprint++;
 
 					if(krav["Status på ärendet"] == 'Produktionssatt' || krav["Status på ärendet"] == 'Klar för produktionssättning' || krav["Status på ärendet"] == 'Klar för test') {
-						$scope.antalAvslutade++;
+						$scope.sprint.antal.avslutade++;
 					} else if (krav["Status på ärendet"] == 'Parkerat ärendet') {
-						$scope.antalParkerade++;
+						$scope.sprint.antal.parkerade++;
 					} else if (krav["Status på ärendet"] == 'Avslutat ärendet') {
 
 					} else {
-						$scope.antalPagaende++;
+						$scope.sprint.antal.pagaende++;
 					}
-
 				}
+
 			});
-			console.log($scope.anvandaStatusar.length);
-			console.log($scope.antalAnvandaStatusar.length);
+			$scope.sprint.krav.sort(function(a, b){
+					if (a.Prio < b.Prio) //sort string ascending
+						return -1 
+					if (a.Prio > b.Prio)
+						return 1
+					return 0 //default return value (no sorting)
+			});
+			console.log($scope.sprint.krav);
+
 			$scope.loaderVisible = false;
 
-			console.log($scope.antalArendenSprint);
+			
+
+			$scope.antalAnvandaStatusar.push($scope.sprint.antal.arendenSprint - $scope.sprint.antal.avslutade);
+			$scope.antalAnvandaStatusar.push($scope.sprint.antal.avslutade);
+
+			$scope.anvandaStatusar.push('Ej avslutade ärenden');
+			$scope.anvandaStatusar.push('Avslutade ärenden');
+
+			console.log(typeof $scope.antalAnvandaStatusar);
 		};
 		
 		$scope.init();
-	}]);
+	}]);	
 
 })();//Encapsulation end
