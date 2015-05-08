@@ -52,7 +52,9 @@
 
 		$scope.pieOptions = {
 			animationEasing: "easeOutCirc",
-			animateRotate : true
+			animateRotate : true,
+			responsive: false,
+			maintainAspectRatio: false
 		};
 
 		//$scope.init();
@@ -96,6 +98,9 @@
 		var hanteraReqtestData = function(data, status, headers, config) {
 			$scope.sprintKrav = [];
 
+			$scope.utvecklare = new Array();
+			$scope.utvecklareKrav = new Array();
+
 			$scope.krav = data;
 			$scope.sprint = {};
 			$scope.sprint.antal = {};
@@ -110,29 +115,32 @@
 				if(krav.Sprint == $scope.aktuellSprint) {
 
 					$scope.sprint.krav.push(krav);
-
-					//var pos = $scope.anvandaStatusar.indexOf(krav["Status på ärendet"]);
-
-					/*if(pos < 0){
-						pos = $scope.anvandaStatusar.length;
-						$scope.anvandaStatusar.push(krav["Status på ärendet"]);
-						$scope.antalAnvandaStatusar[pos] = 0;
-					}
-					$scope.antalAnvandaStatusar[pos]++;*/
-					$scope.sprint.antal.arendenSprint++;
-
-					if(krav["Status på ärendet"] == 'Produktionssatt' || krav["Status på ärendet"] == 'Klar för produktionssättning' || krav["Status på ärendet"] == 'Klar för test') {
+					var status = krav["Status på ärendet"];
+					if(status == 'Produktionssatt' || status == 'Klar för produktionssättning' || status == 'Klart för test' || status == 'Avslutat ärendet') {
 						$scope.sprint.antal.avslutade++;
 					} else if (krav["Status på ärendet"] == 'Parkerat ärendet') {
 						$scope.sprint.antal.parkerade++;
-					} else if (krav["Status på ärendet"] == 'Avslutat ärendet') {
-
 					} else {
 						$scope.sprint.antal.pagaende++;
 					}
-				}
 
+
+
+					if(krav["Utvecklare"] != null && krav["Utvecklare"] != 'null') {
+						var pos = $scope.utvecklare.indexOf(krav["Utvecklare"]);
+						if(pos < 0){
+							pos = $scope.utvecklare.length;
+							$scope.utvecklare.push(krav["Utvecklare"]);
+							$scope.utvecklareKrav[pos] = 0;
+						}
+						$scope.utvecklareKrav[pos]++;
+					}
+
+
+
+				}
 			});
+			$scope.sprint.antal.arendenSprint = $scope.sprint.krav.length;
 			$scope.sprint.krav.sort(function(a, b){
 					if (a.Prio < b.Prio) //sort string ascending
 						return -1 
@@ -140,22 +148,55 @@
 						return 1
 					return 0 //default return value (no sorting)
 			});
-			console.log($scope.sprint.krav);
 
 			$scope.loaderVisible = false;
 
 			
-
-			$scope.antalAnvandaStatusar.push($scope.sprint.antal.arendenSprint - $scope.sprint.antal.avslutade);
 			$scope.antalAnvandaStatusar.push($scope.sprint.antal.avslutade);
-
-			$scope.anvandaStatusar.push('Ej avslutade ärenden');
+			$scope.antalAnvandaStatusar.push($scope.sprint.antal.arendenSprint - $scope.sprint.antal.avslutade);
+			
 			$scope.anvandaStatusar.push('Avslutade ärenden');
+			$scope.anvandaStatusar.push('Ej avslutade ärenden');
+			
 
-			console.log(typeof $scope.antalAnvandaStatusar);
+			console.log($scope.utvecklareKrav);
+			console.log($scope.utvecklare);
+
+			$scope.labels = $scope.utvecklare;
+			$scope.datas = [$scope.utvecklareKrav];
+			$scope.barOptions = {maintainAspectRatio: false}
+
+			$scope.formatTime = 'HH:mm';
+			$scope.formatDate = 'yyyy-MM-dd';
 		};
 		
 		$scope.init();
-	}]);	
+	}]);
+
+
+	app.directive("myCurrentTime", function(dateFilter){
+	    return function(scope, element, attrs){
+	        var format;
+	        
+	        scope.$watch(attrs.myCurrentTime, function(value) {
+	            format = value;
+	            updateTime();
+	        });
+	        
+	        function updateTime(){
+	            var dt = dateFilter(new Date(), format);
+	            element.text(dt);
+	        }
+	        
+	        function updateLater() {
+	            setTimeout(function() {
+	              updateTime(); // update DOM
+	              updateLater(); // schedule another update
+	            }, 1000);
+	        }
+	        
+	        updateLater();
+	    }
+	});
 
 })();//Encapsulation end

@@ -1,6 +1,7 @@
 body {
 	padding-top: 10px;
 	padding-bottom: 20px;
+	background-color: #f8f8f8;
 }
 
 .ajaxloader {
@@ -31,9 +32,67 @@ body {
 	top: 10px;
 } 
 
+.chartbox {
+	position: relative;
+}
+
+.chartbox h2 {
+	padding: 10px 0 20px;
+}
+.chartbox h3 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	font-size: 70px;
+	margin-left: -44px;
+	margin-top: 4px;
+	margin-bottom: 0;
+	width: 90px;
+	text-align: center;
+}
+.box {
+	min-height: 420px;
+}
+.time-container {
+	margin-top: 120px;
+}
+.time-container h2 {
+	font-size: 100px;
+}
+.time-container h3 {
+	font-size: 40px;
+}
+
+.numbers-container h2 {
+	font-size: 50px;
+}
+
 .req-box {
 	padding:10px;
-	background-color: #f5f5f5;
+	background-color: #fff;
 	border: #f1f1f1;
 	margin-bottom: 10px;
+	height: 204px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+.fa-check {
+	display: none;
+	position: absolute;
+	font-size: 60px;
+	color: #96bf47;
+	top: 50%;
+	left: 50%;
+	margin-left: -30px;
+	margin-top: -30px;
+}
+.req-done .fa {
+	display: block;
+}
+.req-done .req-box {
+	opacity: 0.6;
+}
+
+.req-box h3 {
+	font-size: 30px
 }

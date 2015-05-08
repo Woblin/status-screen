@@ -19,9 +19,10 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/css/styles.css" rel="stylesheet">
+    
     <link href="/css/angular-chart.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="/css/styles.css" rel="stylesheet">
     
 
     <!-- script placerade här så sidan inte blinkar -->
@@ -34,6 +35,7 @@
 
 
     <script src="/js/controllers/proxystatus.js"></script>
+
 
   </head>
 
@@ -54,38 +56,60 @@
       <div class="col-md-offset-4 col-md-4 text-right"><h1 style="font-weight:bold;font-size:60px; margin-top:0;">TEAM WWW {{(showView) ? '1' : '2'}}</h1></div>
     </div>
     <div class="row">
+      <div class="col-md-8">
+        <h1>Reqtest sprint #{{aktuellSprint}}</h1>
+      </div>
+    </div>
+    <div class="row">
       <div ng-show="showView">
         <!-- Example row of columns -->
         
-          <div class="col-md-8">
+          <div class="col-md-4 chartbox box">
+            <h2 class="text-center">Avslutade ärenden</h2>
             <div class="ajaxloader" ng-show="loaderVisible"></div>
-            <h1>Reqtest sprint #{{aktuellSprint}}</h1>
-            <p>
-              <canvas id="chart-reqtest-status" class="chart chart-pie" data="antalAnvandaStatusar" labels="anvandaStatusar" legend="true" options="pieOptions"></canvas> 
-            </p>
-          </div>
-          <div class="col-md-3">
-            <h2>Totalt antal ärenden:</h2>
-            <h3>{{sprint.antal.arendenSprint}}</h3>
-            <hr />
-            <h2>Antal pågående ärenden:</h2>
-            <h3>{{sprint.antal.pagaende}}</h3>
-            <hr />
-            <h2>Antal parkerade ärenden:</h2>
-            <h3>{{sprint.antal.parkerade}}</h3>
-            <hr />
-            <h2>Antal avslutade ärenden:</h2>
+              <canvas height="200px" id="chart-reqtest-status" class="chart chart-doughnut" data="antalAnvandaStatusar" labels="anvandaStatusar" legend="false" options="pieOptions" colours="['#9c4275','#c8b0bd']"></canvas>
             <h3>{{sprint.antal.avslutade}}</h3>
+          </div>
+
+          <div class="col-md-4 box">
+            <div class="time-container">
+              <h3 class="text-center" my-current-time="formatDate"></h3>
+              <h2 class="text-center" my-current-time="formatTime"></h2>
+            </div>
+          </div>
+
+          <div class="col-md-3 box">
+            <div class="numbers-container">
+              <hr />
+              <h2 class="text-right"><small>Sprintärenden</small> <span >{{sprint.antal.arendenSprint}}</span></h2>
+              <hr />
+              <h2 class="text-right"><small>Pågående</small> {{sprint.antal.pagaende}}</h2>
+              <hr />
+              <h2 class="text-right"><small>Parkerade</small> {{sprint.antal.parkerade}}</h2>
+              <hr />
+              <h2 class="text-right"><small>Avslutade</small> {{sprint.antal.avslutade}}</h2>
+              <hr />
+            </div>
+          </div>
+
+          <div class="col-md-12" style="margin-top:30px;">
+              <canvas height="400px" id="bar" class="chart chart-bar" data="datas" labels="labels" colours="['#9c4275','#c8b0bd']" options="barOptions"></canvas> 
           </div>
         
         </div>
         <div ng-show="!showView">
-        <div ng-repeat="krav in sprint.krav" class="req-box col-md-3">
-            <h3>{{krav.Rubrik}}</h3>
-            <h4>id: {{krav.id}}</h4>
-            <h4>Prio: {{krav.Prio}}</h4>
+          <div ng-repeat="krav in sprint.krav" class="col-md-3">
+            <div class="{{(krav['Status på ärendet'] == 'Avslutat ärendet' || krav['Status på ärendet'] == 'Produktionssatt' || krav['Status på ärendet'] == 'Klar för produktionssättning' || krav['Status på ärendet'] == 'Klart för test') ? 'req-done' : ''}}">
+              <div class="req-box">
+                <h3>{{krav.Rubrik}}</h3>
+                <h4>id: {{krav.id}}</h4>
+                <h4>Prio: {{krav.Prio}}</h4>
+                <h4>{{krav['Status på ärendet']}}</h4>
+              </div>
+              <i class="fa fa-check"></i>
+            </div>
+          </div>
         </div>
-      </div>
       </div>
     </div> <!-- /container -->
   </body>
