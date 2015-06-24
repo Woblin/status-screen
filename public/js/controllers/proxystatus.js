@@ -88,11 +88,14 @@
 				'</ul>'
 		};
 
-		$scope.aktuellSprint = 46;
+		$scope.aktuellSprint = 47;
 
 		$scope.init = function() {
 			$scope.loaderVisible = true;
-			$http.get('/reqtest').success(hanteraReqtestData);
+			$http.get('/reqtestSprintNr').success(function(data, status, headers, config){
+				$scope.aktuellSprint = data;
+				$http.get('/reqtest').success(hanteraReqtestData);
+			});
 		};
 
 		var hanteraReqtestData = function(data, status, headers, config) {

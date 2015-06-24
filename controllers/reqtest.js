@@ -18,6 +18,13 @@ exports.getReqtest = function(req, res, next) {
 	hamtaReqtestKrav(sparadeKrav, nextLink, 0, res);
 }
 
+exports.getSprintNr = function(req, res, next) {
+	fs.readFile('adminData.json', function(err, data){
+		var jsonData = JSON.parse(data);
+		console.log(jsonData.sprintNr);
+		res.send(jsonData.sprintNr);
+	});
+}
 
 
 function hamtaReqtestKrav(sparadeKrav, nextLink, itterationer, response) {

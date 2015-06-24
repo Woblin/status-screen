@@ -22,5 +22,7 @@ router.get('/updateProxyHosts', proxy.updateProxyHosts);
 
 router.get('/proxyCheck', proxy.proxyCheck);
 
+router.get('/reqtestSprintNr', reqtest.getSprintNr);
+
 
 module.exports = router;
