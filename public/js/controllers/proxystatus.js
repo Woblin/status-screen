@@ -103,6 +103,7 @@
 
 			$scope.utvecklare = new Array();
 			$scope.utvecklareKrav = new Array();
+			$scope.utvecklareKravAvslutade = new Array();
 
 			$scope.krav = data;
 			$scope.sprint = {};
@@ -127,7 +128,7 @@
 						$scope.sprint.antal.pagaende++;
 					}
 
-
+					//console.log(krav);
 
 					if(krav["Utvecklare"] != null && krav["Utvecklare"] != 'null') {
 						var pos = $scope.utvecklare.indexOf(krav["Utvecklare"]);
@@ -135,8 +136,12 @@
 							pos = $scope.utvecklare.length;
 							$scope.utvecklare.push(krav["Utvecklare"]);
 							$scope.utvecklareKrav[pos] = 0;
+							$scope.utvecklareKravAvslutade[pos] = 0;
 						}
 						$scope.utvecklareKrav[pos]++;
+						if(status == 'Produktionssatt' || status == 'Klar för produktionssättning' || status == 'Klart för test' || status == 'Avslutat ärendet') {
+							$scope.utvecklareKravAvslutade[pos]++;
+						}
 					}
 
 
@@ -166,7 +171,7 @@
 			console.log($scope.utvecklare);
 
 			$scope.labels = $scope.utvecklare;
-			$scope.datas = [$scope.utvecklareKrav];
+			$scope.datas = [$scope.utvecklareKrav, $scope.utvecklareKravAvslutade];
 			$scope.barOptions = {maintainAspectRatio: false}
 
 			$scope.formatTime = 'HH:mm';
