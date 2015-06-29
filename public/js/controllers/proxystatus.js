@@ -90,8 +90,12 @@
 
 		$scope.aktuellSprint = 47;
 
+		$scope.formatTime = 'HH:mm';
+		$scope.formatDate = 'yyyy-MM-dd';
+
 		$scope.init = function() {
 			$scope.loaderVisible = true;
+
 			$http.get('/reqtestSprintNr').success(function(data, status, headers, config){
 				$scope.aktuellSprint = data;
 				$http.get('/reqtest').success(hanteraReqtestData);
@@ -173,9 +177,6 @@
 			$scope.labels = $scope.utvecklare;
 			$scope.datas = [$scope.utvecklareKrav, $scope.utvecklareKravAvslutade];
 			$scope.barOptions = {maintainAspectRatio: false}
-
-			$scope.formatTime = 'HH:mm';
-			$scope.formatDate = 'yyyy-MM-dd';
 		};
 		
 		$scope.init();
